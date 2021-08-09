@@ -13,6 +13,7 @@ namespace GrouppedListReorder.ViewModels
     public class MainPageViewModel : ObservableObject
     {
         private ObservableCollection<ItemViewModel> _items = new ObservableCollection<ItemViewModel>();
+
         public ObservableCollection<ItemViewModel> Items
         {
             get { return _items; }
@@ -20,6 +21,7 @@ namespace GrouppedListReorder.ViewModels
         }
 
         private ObservableCollection<ItemsGroupViewModel> _groupedItems = new ObservableCollection<ItemsGroupViewModel>();
+
         public ObservableCollection<ItemsGroupViewModel> GroupedItems
         {
             get { return _groupedItems; }
@@ -45,10 +47,10 @@ namespace GrouppedListReorder.ViewModels
             StateRefresh = new Command(OnStateRefresh);
             StateReset = new Command(OnStateReset);
             StateTest = new Command(OnStateTest);
-            ItemDragged = new Command<ItemViewModel>(OnItemDragged);
-            ItemDraggedOver = new Command<ItemViewModel>(OnItemDraggedOver);
-            ItemDragLeave = new Command<ItemViewModel>(OnItemDragLeave);
-            ItemDropped = new Command<ItemViewModel>(i => OnItemDropped(i));
+            ItemDragged = new Command<ItemsGroupViewModel>(OnItemDragged);
+            ItemDraggedOver = new Command<ItemsGroupViewModel>(OnItemDraggedOver);
+            ItemDragLeave = new Command<ItemsGroupViewModel>(OnItemDragLeave);
+            ItemDropped = new Command<ItemsGroupViewModel>(i => OnItemDropped(i));
             ResetItemsState();
         }
 
@@ -73,47 +75,49 @@ namespace GrouppedListReorder.ViewModels
             PrintItemsState();
         }
 
-        private void OnItemDragged(ItemViewModel item)
+        private void OnItemDragged(ItemsGroupViewModel item)
         {
-            Debug.WriteLine($"OnItemDragged: {item?.Title}");
-            Items.ForEach(i => i.IsBeingDragged = item == i);
+            Debug.WriteLine($"OnItemDragged: {item?.Name}");
+            GroupedItems.ForEach(i => i.IsBeingDragged = item == i);
         }
 
-        private void OnItemDraggedOver(ItemViewModel item)
+        private void OnItemDraggedOver(ItemsGroupViewModel item)
         {
-            Debug.WriteLine($"OnItemDraggedOver: {item?.Title}");
-            var itemBeingDragged = _items.FirstOrDefault(i => i.IsBeingDragged);
-            Items.ForEach(i => i.IsBeingDraggedOver = item == i && item != itemBeingDragged);
+            Debug.WriteLine($"OnItemDraggedOver: {item?.Name}");
+            var itemBeingDragged = GroupedItems.FirstOrDefault(i => i.IsBeingDragged);
+            GroupedItems.ForEach(i => i.IsBeingDraggedOver = item == i && item != itemBeingDragged);
         }
 
-        private void OnItemDragLeave(ItemViewModel item)
+        private void OnItemDragLeave(ItemsGroupViewModel item)
         {
-            Debug.WriteLine($"OnItemDragLeave: {item?.Title}");
-            Items.ForEach(i => i.IsBeingDraggedOver = false);
+            Debug.WriteLine($"OnItemDragLeave: {item?.Name}");
+            GroupedItems.ForEach(i => i.IsBeingDraggedOver = false);
         }
 
-        private async Task OnItemDropped(ItemViewModel item)
+        private async Task OnItemDropped(ItemsGroupViewModel item)
         {
-            var itemToMove = _items.First(i => i.IsBeingDragged);
+            var itemToMove = GroupedItems.First(i => i.IsBeingDragged);
             var itemToInsertBefore = item;
 
             if (itemToMove == null || itemToInsertBefore == null || itemToMove == itemToInsertBefore)
                 return;
 
-            var categoryToMoveFrom = GroupedItems.First(g => g.Contains(itemToMove));
-            categoryToMoveFrom.Remove(itemToMove);
+            //var categoryToMoveFrom = GroupedItems.First(g => g.Contains(itemToMove));
+            //categoryToMoveFrom.Remove(itemToMove);
 
             // Wait for remove animation to be completed
             // https://github.com/xamarin/Xamarin.Forms/issues/13791
             // await Task.Delay(1000);
 
-            var categoryToMoveTo = GroupedItems.First(g => g.Contains(itemToInsertBefore));
-            var insertAtIndex = categoryToMoveTo.IndexOf(itemToInsertBefore);
-            itemToMove.Category = categoryToMoveFrom.Name;
-            categoryToMoveTo.Insert(insertAtIndex, itemToMove);
+            //var categoryToMoveTo = GroupedItems.First(g => g.Contains(itemToInsertBefore));
+            var currentIndex = GroupedItems.IndexOf(itemToMove);
+            var insertAtIndex = GroupedItems.IndexOf(itemToInsertBefore);
+            //itemToMove.Category = categoryToMoveFrom.Name;
+            //categoryToMoveTo.Insert(insertAtIndex, itemToMove);
+            GroupedItems.Move(currentIndex, insertAtIndex);
             itemToMove.IsBeingDragged = false;
             itemToInsertBefore.IsBeingDraggedOver = false;
-            Debug.WriteLine($"OnItemDropped: [{itemToMove?.Title}] => [{itemToInsertBefore?.Title}], target index = [{insertAtIndex}]");
+            Debug.WriteLine($"OnItemDropped: [{itemToMove?.Name}] => [{itemToInsertBefore?.Name}], target index = [{insertAtIndex}]");
 
             PrintItemsState();
         }

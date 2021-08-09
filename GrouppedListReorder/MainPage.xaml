@@ -92,17 +92,23 @@
                         Padding="20"
                         x:DataType="vm:ItemsGroupViewModel"
                         BackgroundColor="PaleVioletRed">
-                        <Label Text="{Binding Name}" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.GroupHeaderTemplate>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout
-                        Padding="5"
-                        x:DataType="vm:ItemViewModel"
-                        BackgroundColor="Azure">
-                        <StackLayout.GestureRecognizers>
+
+                        <Grid
+                            BackgroundColor="LightYellow"
+                            HeightRequest="50"
+                            IsVisible="{Binding IsBeingDraggedOver}" />
+                        <Label BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource DragColorConverter}}" Text="{Binding Name}">
+
+                            <Label.GestureRecognizers>
+                                <DragGestureRecognizer
+                                    CanDrag="True"
+                                    DragStarting="DragGestureRecognizer_DragStarting_Collection"
+                                    DragStartingCommand="{Binding BindingContext.ItemDragged, Source={x:Reference MyItems}}"
+                                    DragStartingCommandParameter="{Binding}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                        <Grid.GestureRecognizers>
                             <DropGestureRecognizer
                                 AllowDrop="True"
                                 DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={x:Reference MyItems}}"
@@ -112,26 +118,22 @@
                                 Drop="DropGestureRecognizer_Drop_Collection"
                                 DropCommand="{Binding BindingContext.ItemDropped, Source={x:Reference MyItems}}"
                                 DropCommandParameter="{Binding}" />
-                        </StackLayout.GestureRecognizers>
-                        <Grid
-                            BackgroundColor="LightYellow"
-                            HeightRequest="50"
-                            IsVisible="{Binding IsBeingDraggedOver}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout
+                        Padding="5"
+                        x:DataType="vm:ItemViewModel"
+                        BackgroundColor="Azure">
                         <Label
-                            BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource DragColorConverter}}"
                             FontSize="Large"
                             HeightRequest="50"
                             HorizontalTextAlignment="Center"
                             Text="{Binding Title}"
-                            VerticalTextAlignment="Center">
-                            <Label.GestureRecognizers>
-                                <DragGestureRecognizer
-                                    CanDrag="True"
-                                    DragStarting="DragGestureRecognizer_DragStarting_Collection"
-                                    DragStartingCommand="{Binding BindingContext.ItemDragged, Source={x:Reference MyItems}}"
-                                    DragStartingCommandParameter="{Binding}" />
-                            </Label.GestureRecognizers>
-                        </Label>
+                            VerticalTextAlignment="Center" />
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

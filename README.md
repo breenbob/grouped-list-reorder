@@ -1,3 +1,6 @@
+# Forked
+This repo has been forked and modified to allow drag/drop reordering of CollectionView group headers, instead of grouped items within header categories.
+
 # CollectionView Drag & Drop Item Reordering with Gesture Recognizers
 
 Items reordering in a list-based control is a pretty handy feature and it is used in various use cases. From simple scenarios like configuring settings, defining tabs order to complex scenarios like managing user content, and reordering images or email. With the recent [Xamarin.Forms 5.0][1] release, [Drag and Drop gesture recognizers][2] were introduced and enable you to unlock these scenarios in your app. In this post I will guide you through everything you need to add drag & drop to your CollectionView.

@@ -89,16 +89,17 @@
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate>
                     <Grid
-                        Padding="20"
+                        Margin="0"
+                        RowSpacing="0"
+                        HeightRequest="60"
+                        Padding="5"
                         x:DataType="vm:ItemsGroupViewModel"
                         BackgroundColor="PaleVioletRed">
-
                         <Grid
                             BackgroundColor="LightYellow"
-                            HeightRequest="50"
+                            HeightRequest="60"
                             IsVisible="{Binding IsBeingDraggedOver}" />
-                        <Label BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource DragColorConverter}}" Text="{Binding Name}">
-
+                        <Label VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center" HeightRequest="50" BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource DragColorConverter}}" Text="{Binding Name}">
                             <Label.GestureRecognizers>
                                 <DragGestureRecognizer
                                     CanDrag="True"
@@ -124,13 +125,15 @@
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
+                    <!--Milan : Set HeightRequest to 0 if the "Title" is empty or null-->
                     <StackLayout
-                        Padding="5"
+                        VerticalOptions="Center"
+                        Padding="10"
                         x:DataType="vm:ItemViewModel"
                         BackgroundColor="Azure">
                         <Label
+                            VerticalOptions="Center"
                             FontSize="Large"
-                            HeightRequest="50"
                             HorizontalTextAlignment="Center"
                             Text="{Binding Title}"
                             VerticalTextAlignment="Center" />

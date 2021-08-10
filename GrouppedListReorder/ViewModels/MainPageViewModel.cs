@@ -125,6 +125,9 @@ namespace GrouppedListReorder.ViewModels
         private void ResetItemsState()
         {
             Items.Clear();
+            Items.Add(new ItemViewModel { Category = "No items Category 1" });
+            Items.Add(new ItemViewModel { Category = "No items Category 2" });
+
             Items.Add(new ItemViewModel { Category = "Category 1", Title = "Item 1" });
             Items.Add(new ItemViewModel { Category = "Category 1", Title = "Item 2" });
             Items.Add(new ItemViewModel { Category = "Category 2", Title = "Item 3" });

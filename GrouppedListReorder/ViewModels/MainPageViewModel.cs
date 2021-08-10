@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -125,8 +126,6 @@ namespace GrouppedListReorder.ViewModels
         private void ResetItemsState()
         {
             Items.Clear();
-            Items.Add(new ItemViewModel { Category = "No items Category 1" });
-            Items.Add(new ItemViewModel { Category = "No items Category 2" });
 
             Items.Add(new ItemViewModel { Category = "Category 1", Title = "Item 1" });
             Items.Add(new ItemViewModel { Category = "Category 1", Title = "Item 2" });
@@ -148,6 +147,11 @@ namespace GrouppedListReorder.ViewModels
                 .GroupBy(i => i.Category)
                 .Select(g => new ItemsGroupViewModel(g.Key, g))
                 .ToObservableCollection();
+
+            // Example of a group with no items - needs to be added after above linq statement as grouping items by category
+            // will mean these groups are stripped out if they have no items
+            GroupedItems.Insert(0, new ItemsGroupViewModel("No Items Category 1", new List<ItemViewModel>()));
+            GroupedItems.Insert(1, new ItemsGroupViewModel("No Items Category 2", new List<ItemViewModel>()));
         }
 
         private void PrintItemsState()

@@ -90,16 +90,21 @@
                 <DataTemplate>
                     <Grid
                         Margin="0"
-                        RowSpacing="0"
-                        HeightRequest="60"
                         Padding="5"
                         x:DataType="vm:ItemsGroupViewModel"
-                        BackgroundColor="PaleVioletRed">
+                        BackgroundColor="PaleVioletRed"
+                        HeightRequest="60"
+                        RowSpacing="0">
                         <Grid
                             BackgroundColor="LightYellow"
                             HeightRequest="60"
                             IsVisible="{Binding IsBeingDraggedOver}" />
-                        <Label VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center" HeightRequest="50" BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource DragColorConverter}}" Text="{Binding Name}">
+                        <Label
+                            BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource DragColorConverter}}"
+                            HeightRequest="50"
+                            Text="{Binding Name}"
+                            VerticalOptions="CenterAndExpand"
+                            VerticalTextAlignment="Center">
                             <Label.GestureRecognizers>
                                 <DragGestureRecognizer
                                     CanDrag="True"
@@ -125,17 +130,17 @@
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <!--Milan : Set HeightRequest to 0 if the "Title" is empty or null-->
+                    <!--  Milan : Set HeightRequest to 0 if the "Title" is empty or null  -->
                     <StackLayout
-                        VerticalOptions="Center"
                         Padding="10"
                         x:DataType="vm:ItemViewModel"
-                        BackgroundColor="Azure">
+                        BackgroundColor="Azure"
+                        VerticalOptions="Center">
                         <Label
-                            VerticalOptions="Center"
                             FontSize="Large"
                             HorizontalTextAlignment="Center"
                             Text="{Binding Title}"
+                            VerticalOptions="Center"
                             VerticalTextAlignment="Center" />
                     </StackLayout>
                 </DataTemplate>
